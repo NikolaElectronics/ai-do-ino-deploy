@@ -9,12 +9,20 @@ from PIL import Image
 # Set page title (browser tab)
 st.set_page_config(page_title="AIdoino", page_icon="🤖")
 # Load and display logo
-st.image("https://raw.githubusercontent.com/NikolaElectronics/ai-do-ino-deploy/main/logo.png", width=200)
+st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
 
+# Centered logo + title
+st.markdown(
+    """
+    <div style="text-align: center; margin-bottom: 1rem;">
+        <img src="https://raw.githubusercontent.com/NikolaElectronics/ai-do-ino-deploy/main/logo.png" width="150">
+        <h1 style="margin-bottom: 0.2rem;">AIdoino</h1>
+        <p style="font-size: 1.1rem; color: #bbb;">Your AI-based Arduino Assistant</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-# App title
-st.title("🤖 AIdoino - Your AI-based Arduino Assistant")
-st.markdown("Generate professional, safe microcontroller code with the help of AI")
 
 with st.expander("📌 Example prompts"):
     st.markdown(
