@@ -10,14 +10,15 @@ st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
 # Centered logo + title
 st.markdown(
     """
-    <div style="text-align: center; margin-bottom: 1rem;">
-        <img src="https://raw.githubusercontent.com/NikolaElectronics/ai-do-ino-deploy/main/logo.png" width="150">
-        <h1 style="margin-bottom: 0.2rem;">AIdoino</h1>
-        <p style="font-size: 1.1rem; color: #bbb;">Your AI-based Arduino Assistant</p>
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <img src="https://raw.githubusercontent.com/NikolaElectronics/ai-do-ino-deploy/main/logo.png" width="200">
+        <h1 style="font-size: 3rem; margin-bottom: 0.2rem; margin-top: 1rem;">AIdoino</h1>
+        <p style="font-size: 1.25rem; color: #aaa;">Your AI-based Arduino Assistant</p>
     </div>
     """,
     unsafe_allow_html=True
 )
+
 
 
 with st.expander("📌 Example prompts"):
