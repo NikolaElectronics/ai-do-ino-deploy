@@ -3,6 +3,8 @@ import openai
 import os
 from fpdf import FPDF
 import zipfile
+from PIL import Image
+
 
 # Set page title (browser tab)
 st.set_page_config(page_title="AIdoino", page_icon="🤖")
