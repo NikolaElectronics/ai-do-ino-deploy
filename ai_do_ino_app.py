@@ -1,15 +1,16 @@
 import streamlit as st
 import openai
 import os
+from fpdf import FPDF
+import zipfile
 
 # Page config
 st.set_page_config(page_title="AI-do-ino", page_icon="🤖")
 
-# Title
+# UI
 st.title("🤖 AI-do-ino - Let AI do Arduino")
 st.markdown("Generate professional, safe Arduino and microcontroller code with the help of AI")
 
-# Examples
 with st.expander("📌 Example prompts"):
     st.markdown(
         "- Blink an LED every second\n"
@@ -17,22 +18,18 @@ with st.expander("📌 Example prompts"):
         "- Send temperature data to the cloud with ESP32"
     )
 
-# Board selection
 board = st.selectbox(
     "🧰 Select your development board:",
     ["Arduino Uno", "Arduino Uno R4 (Renesas)", "Arduino Nano", "ESP32", "ESP8266", "Raspberry Pi"]
 )
 
-# AC usage checkbox
 allow_ac_control = st.checkbox("⚡ I want to control high-voltage (AC) devices using relays or optocouplers")
 
-# Project prompt
 user_prompt = st.text_area(
     "💬 Describe your microcontroller project:",
     placeholder="Ex: Control a 220V light bulb using a relay"
 )
 
-# Generate button
 if st.button("⚡ Generate Code"):
     if not user_prompt.strip():
         st.warning("Please describe your project before generating code.")
@@ -41,7 +38,6 @@ if st.button("⚡ Generate Code"):
             try:
                 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-                # Safety + persona context
                 system_prompt = (
                     "You are an embedded systems engineer with 15+ years of experience working with "
                     "Arduino (including Uno R4 with Renesas), ESP32, ESP8266, and Raspberry Pi. "
@@ -54,7 +50,6 @@ if st.button("⚡ Generate Code"):
                 if not allow_ac_control:
                     system_prompt += " Never generate code for AC control unless explicitly allowed."
 
-                # Prompt for the assistant
                 full_prompt = (
                     f"Board: {board}\n"
                     f"Task: {user_prompt}\n"
@@ -62,7 +57,6 @@ if st.button("⚡ Generate Code"):
                     "Comment each major step clearly."
                 )
 
-                # Request to OpenAI
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
                     messages=[
@@ -75,5 +69,27 @@ if st.button("⚡ Generate Code"):
                 st.success("✅ Code generated successfully!")
                 st.code(generated_code, language="cpp")
 
-            except Exception as e:
-                st.error(f"❌ Error: {e}")
+                # === Create files ===
+                code_file = "arduino_sketch.ino"
+                doc_file = "project_description.md"
+                pdf_file = "high_voltage_confirmation.pdf"
+                zip_file = "ai-do-ino_project_bundle.zip"
+
+                # Save .ino
+                with open(code_file, "w") as f:
+                    f.write(generated_code)
+
+                # Save .md
+                project_doc = f"""# AI-do-ino Project
+
+**Board:** {board}  
+**AC control enabled:** {'Yes' if allow_ac_control else 'No'}
+
+---
+
+**User Prompt:**  
+{user_prompt}
+
+---
+
+**Generated Code:**  
