@@ -12,7 +12,7 @@ st.markdown(
     """
     <div style="text-align: center; margin-bottom: 2.5rem;">
         <img src="https://raw.githubusercontent.com/NikolaElectronics/ai-do-ino-deploy/main/logo.png"
-             style="width: 600px; max-width: 100%; height: auto; margin-bottom: 1rem;">
+             style="width: 400px; max-width: 100%; height: auto; margin-bottom: 1rem;">
         <h1 style="font-size: 3.2rem; margin-bottom: 0.4rem; margin-top: 0.5rem;">AIdoino</h1>
         <p style="font-size: 1.35rem; color: #bbb;">Your AI-based Arduino Assistant</p>
     </div>
