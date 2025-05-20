@@ -4,12 +4,12 @@ import os
 from fpdf import FPDF
 import zipfile
 
-# Page config
-st.set_page_config(page_title="AI-do-ino", page_icon="🤖")
+# Set page title (browser tab)
+st.set_page_config(page_title="AIdoino", page_icon="🤖")
 
-# UI
-st.title("🤖 AI-do-ino - Let AI do Arduino")
-st.markdown("Generate professional, safe Arduino and microcontroller code with the help of AI")
+# App title
+st.title("🤖 AIdoino - Your AI-based Arduino Assistant")
+st.markdown("Generate professional, safe microcontroller code with the help of AI")
 
 with st.expander("📌 Example prompts"):
     st.markdown(
@@ -73,7 +73,7 @@ if st.button("⚡ Generate Code"):
                 code_file = "arduino_sketch.ino"
                 doc_file = "project_description.md"
                 pdf_file = "high_voltage_confirmation.pdf"
-                zip_file = "ai-do-ino_project_bundle.zip"
+                zip_file = "aidoino_project_bundle.zip"
 
                 # Save .ino
                 with open(code_file, "w") as f:
@@ -81,7 +81,7 @@ if st.button("⚡ Generate Code"):
 
                 # Save .md (project doc)
                 project_doc = (
-                    "# AI-do-ino Project\n\n"
+                    "# AIdoino Project\n\n"
                     f"**Board:** {board}\n"
                     f"**AC control enabled:** {'Yes' if allow_ac_control else 'No'}\n\n"
                     "---\n\n"
@@ -102,7 +102,7 @@ if st.button("⚡ Generate Code"):
                     pdf.add_page()
                     pdf.set_font("Arial", size=12)
                     pdf.multi_cell(0, 10, txt=(
-                        "AI-do-ino - High Voltage Responsibility Confirmation\n\n"
+                        "AIdoino - High Voltage Responsibility Confirmation\n\n"
                         f"Board selected: {board}\n"
                         f"User prompt: {user_prompt}\n"
                         "AC Control Option: ENABLED\n\n"
