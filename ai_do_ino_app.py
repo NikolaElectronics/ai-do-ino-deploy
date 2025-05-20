@@ -79,17 +79,49 @@ if st.button("⚡ Generate Code"):
                 with open(code_file, "w") as f:
                     f.write(generated_code)
 
-                # Save .md
-                project_doc = f"""# AI-do-ino Project
+                # Save .md (project doc)
+                project_doc = (
+                    "# AI-do-ino Project\n\n"
+                    f"**Board:** {board}\n"
+                    f"**AC control enabled:** {'Yes' if allow_ac_control else 'No'}\n\n"
+                    "---\n\n"
+                    "**User Prompt:**\n"
+                    f"{user_prompt}\n\n"
+                    "---\n\n"
+                    "**Generated Code:**\n"
+                    "```\n"
+                    f"{generated_code}\n"
+                    "```"
+                )
+                with open(doc_file, "w") as f:
+                    f.write(project_doc)
 
-**Board:** {board}  
-**AC control enabled:** {'Yes' if allow_ac_control else 'No'}
+                # Create PDF confirmation if AC is enabled
+                if allow_ac_control:
+                    pdf = FPDF()
+                    pdf.add_page()
+                    pdf.set_font("Arial", size=12)
+                    pdf.multi_cell(0, 10, txt=(
+                        "AI-do-ino - High Voltage Responsibility Confirmation\n\n"
+                        f"Board selected: {board}\n"
+                        f"User prompt: {user_prompt}\n"
+                        "AC Control Option: ENABLED\n\n"
+                        "By generating this code, the user confirms they understand that working with high-voltage (AC) "
+                        "components requires proper safety precautions, including the use of relays, optocouplers, and isolation.\n\n"
+                        "The user takes full responsibility for the application and consequences of the code generated."
+                    ))
+                    pdf.output(pdf_file)
 
----
+                # Create ZIP
+                with zipfile.ZipFile(zip_file, "w") as zipf:
+                    zipf.write(code_file)
+                    zipf.write(doc_file)
+                    if allow_ac_control:
+                        zipf.write(pdf_file)
 
-**User Prompt:**  
-{user_prompt}
+                # Download ZIP
+                with open(zip_file, "rb") as f:
+                    st.download_button("📦 Download project ZIP", f, file_name=zip_file)
 
----
-
-**Generated Code:**  
+            except Exception as e:
+                st.error(f"❌ Error: {e}")
