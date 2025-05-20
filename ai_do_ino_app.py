@@ -11,13 +11,15 @@ st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
 st.markdown(
     """
     <div style="text-align: center; margin-bottom: 2.5rem;">
-        <img src="https://raw.githubusercontent.com/NikolaElectronics/ai-do-ino-deploy/main/logo.png" width="220">
-        <h1 style="font-size: 3.2rem; margin-bottom: 0.4rem; margin-top: 1rem;">AIdoino</h1>
+        <img src="https://raw.githubusercontent.com/NikolaElectronics/ai-do-ino-deploy/main/logo.png"
+             style="width: 300px; max-width: 100%; height: auto; margin-bottom: 1rem;">
+        <h1 style="font-size: 3.2rem; margin-bottom: 0.4rem; margin-top: 0.5rem;">AIdoino</h1>
         <p style="font-size: 1.35rem; color: #bbb;">Your AI-based Arduino Assistant</p>
     </div>
     """,
     unsafe_allow_html=True
 )
+
 
 
 
