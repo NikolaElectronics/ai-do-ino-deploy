@@ -8,6 +8,9 @@ from PIL import Image
 
 # Set page title (browser tab)
 st.set_page_config(page_title="AIdoino", page_icon="🤖")
+# Load and display logo
+st.image("https://raw.githubusercontent.com/NikolaElectronics/ai-do-ino-deploy/main/logo.png", width=200)
+
 
 # App title
 st.title("🤖 AIdoino - Your AI-based Arduino Assistant")
