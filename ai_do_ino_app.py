@@ -22,6 +22,29 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+language = st.selectbox(
+    "🌍 Choose explanation language:",
+    [
+        "English",
+        "Română",
+        "Español",
+        "Français",
+        "Deutsch",
+        "Português",
+        "हिन्दी (Hindi)",
+        "বাংলা (Bengali)",
+        "العربية (Arabic)",
+        "中文 (Chinese)",
+        "日本語 (Japanese)",
+        "한국어 (Korean)",
+        "ไทย (Thai)",
+        "Türkçe",
+        "Italiano",
+        "Русский (Russian)"
+    ]
+)
+
+st.markdown(f"✏️ Language selected: **{language}**")
 
 
 
@@ -70,9 +93,12 @@ if st.button("⚡ Generate Code"):
                 full_prompt = (
                     f"Board: {board}\n"
                     f"Task: {user_prompt}\n"
-                    "Generate the appropriate embedded code with setup() and loop() (if Arduino/ESP). "
-                    "Comment each major step clearly."
+                    f"Language: {language}\n"
+                    f"Generate the embedded code with setup() and loop() (if Arduino/ESP).\n"
+                    f"Include inline comments and a short explanation in {language}.\n"
+                    "Avoid English unless explicitly selected."
                 )
+
 
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
