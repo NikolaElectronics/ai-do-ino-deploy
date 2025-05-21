@@ -1,86 +1,14 @@
-import streamlit as st
-import openai
-import os
-from fpdf import FPDF
-import zipfile
-from PIL import Image
-
-# Load and display logo
-st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
-
-# UI: Logo + titlu centrat, font mare
-st.markdown(
-    """
-    <div style="text-align: center; margin-bottom: 2.5rem;">
-        <img src="https://raw.githubusercontent.com/NikolaElectronics/ai-do-ino-deploy/main/logo.png"
-             style="width: 280px; max-width: 100%; height: auto; margin-bottom: 1rem;">
-        <h1 style="font-size: 3.5rem; margin: 0;">AIdoino</h1>
-        <p style="font-size: 1.4rem; color: #aaa; margin-top: 0.3rem;">
-            Your AI-based Arduino Assistant
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-language = st.selectbox(
-    "🌍 Choose explanation language:",
-    [
-        "English",
-        "Română",
-        "Español",
-        "Français",
-        "Deutsch",
-        "Português",
-        "हिन्दी (Hindi)",
-        "বাংলা (Bengali)",
-        "العربية (Arabic)",
-        "中文 (Chinese)",
-        "日本語 (Japanese)",
-        "한국어 (Korean)",
-        "ไทย (Thai)",
-        "Türkçe",
-        "Italiano",
-        "Русский (Russian)"
-    ]
-)
-
-st.markdown(f"✏️ Language selected: **{language}**")
-
-
-
-
-
-
-with st.expander("📌 Example prompts"):
-    st.markdown(
-        "- Blink an LED every second\n"
-        "- Control a 220V bulb using a relay\n"
-        "- Send temperature data to the cloud with ESP32"
-    )
-
-board = st.selectbox(
-    "🧰 Select your development board:",
-    ["Arduino Uno", "Arduino Uno R4 (Renesas)", "Arduino Nano", "ESP32", "ESP8266", "Raspberry Pi"]
-)
-
-allow_ac_control = st.checkbox("⚡ I want to control high-voltage (AC) devices using relays or optocouplers")
-
-user_prompt = st.text_area(
-    "💬 Describe your microcontroller project:",
-    placeholder="Ex: Control a 220V light bulb using a relay"
-)
-
 if st.button("⚡ Generate Code"):
-    # Limita soft: 5 generații gratuite per sesiune
+    # Limita soft: 3 generații gratuite per sesiune
     if "generation_count" not in st.session_state:
-    st.session_state.generation_count = 0
+        st.session_state.generation_count = 0
 
     MAX_FREE_GENERATIONS = 3
 
     if st.session_state.generation_count >= MAX_FREE_GENERATIONS:
-    st.warning("🚫 You've reached the free generation limit.")
-    st.info("Support AIdoino to unlock unlimited access 💡")
-    st.stop()  # Blochează execuția mai departe
+        st.warning("🚫 You've reached the free generation limit.")
+        st.info("Support AIdoino to unlock unlimited access 💡")
+        st.stop()
 
     if not user_prompt.strip():
         st.warning("Please describe your project before generating code.")
@@ -110,17 +38,19 @@ if st.button("⚡ Generate Code"):
                     "Avoid English unless explicitly selected."
                 )
 
-
+                # 🧠 Trimitere la OpenAI
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
                     messages=[
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": full_prompt}
                     ]
-                    st.session_state.generation_count += 1
-
                 )
 
+                # ✅ Incrementăm contorul
+                st.session_state.generation_count += 1
+
+                # ✅ Afișăm codul
                 generated_code = response.choices[0].message["content"]
                 st.success("✅ Code generated successfully!")
                 st.code(generated_code, language="cpp")
@@ -131,11 +61,9 @@ if st.button("⚡ Generate Code"):
                 pdf_file = "high_voltage_confirmation.pdf"
                 zip_file = "aidoino_project_bundle.zip"
 
-                # Save .ino
                 with open(code_file, "w") as f:
                     f.write(generated_code)
 
-                # Save .md (project doc)
                 project_doc = (
                     "# AIdoino Project\n\n"
                     f"**Board:** {board}\n"
@@ -152,7 +80,6 @@ if st.button("⚡ Generate Code"):
                 with open(doc_file, "w") as f:
                     f.write(project_doc)
 
-                # Create PDF confirmation if AC is enabled
                 if allow_ac_control:
                     pdf = FPDF()
                     pdf.add_page()
@@ -168,14 +95,12 @@ if st.button("⚡ Generate Code"):
                     ))
                     pdf.output(pdf_file)
 
-                # Create ZIP
                 with zipfile.ZipFile(zip_file, "w") as zipf:
                     zipf.write(code_file)
                     zipf.write(doc_file)
                     if allow_ac_control:
                         zipf.write(pdf_file)
 
-                # Download ZIP
                 with open(zip_file, "rb") as f:
                     st.download_button("📦 Download project ZIP", f, file_name=zip_file)
 
