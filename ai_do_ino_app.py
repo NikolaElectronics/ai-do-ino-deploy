@@ -71,6 +71,17 @@ user_prompt = st.text_area(
 )
 
 if st.button("⚡ Generate Code"):
+    # Limita soft: 5 generații gratuite per sesiune
+    if "generation_count" not in st.session_state:
+    st.session_state.generation_count = 0
+
+    MAX_FREE_GENERATIONS = 3
+
+    if st.session_state.generation_count >= MAX_FREE_GENERATIONS:
+    st.warning("🚫 You've reached the free generation limit.")
+    st.info("Support AIdoino to unlock unlimited access 💡")
+    st.stop()  # Blochează execuția mai departe
+
     if not user_prompt.strip():
         st.warning("Please describe your project before generating code.")
     else:
@@ -106,6 +117,8 @@ if st.button("⚡ Generate Code"):
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": full_prompt}
                     ]
+                    st.session_state.generation_count += 1
+
                 )
 
                 generated_code = response.choices[0].message["content"]
