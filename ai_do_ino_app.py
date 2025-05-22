@@ -6,6 +6,8 @@ import zipfile
 from PIL import Image
 
 st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
+# 🔐 Manual premium switch (temporar, până integrăm Stripe)
+is_premium = False
 
 st.markdown(
     """
@@ -39,11 +41,13 @@ if st.button("⚡ Generate Code"):
     if "generation_count" not in st.session_state:
         st.session_state.generation_count = 0
 
-    MAX_FREE_GENERATIONS = 3
-    if st.session_state.generation_count >= MAX_FREE_GENERATIONS:
-        st.warning("🚫 You've reached the free generation limit.")
-        st.info("Support AIdoino to unlock unlimited access 💡")
-        st.stop()
+if is_premium:
+    with open(zip_file, "rb") as f:
+        st.download_button("📦 Download full project ZIP (Premium)", f, file_name=zip_file)
+else:
+    st.info("📦 Project export is a Premium feature.")
+    st.button("🚀 Upgrade to Premium")
+
 
     if not user_prompt.strip():
         st.warning("Please describe your project before generating code.")
