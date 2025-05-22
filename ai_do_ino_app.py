@@ -5,10 +5,13 @@ from fpdf import FPDF
 import zipfile
 from PIL import Image
 
+# Configurație pagină
 st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
-# 🔐 Manual premium switch (temporar, până integrăm Stripe)
+
+# 🔐 Setare manuală premium (temporar)
 is_premium = False
 
+# 🧠 Logo și titlu
 st.markdown(
     """
     <div style="text-align: center; margin-bottom: 2.5rem;">
@@ -23,6 +26,23 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# ☕ Buy Me a Coffee button
+st.markdown(
+    """
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <a href="https://buymeacoffee.com/nikolaelectronics" target="_blank">
+            <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png"
+                 alt="Buy Me A Coffee" style="height: 60px !important;">
+        </a>
+        <p style="color: gray; font-size: 0.9rem; margin-top: 0.5rem;">
+            Support AIdoino to keep it free and evolving ⚡
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# Selecții
 language = st.selectbox("🌍 Choose explanation language:", [
     "English", "Română", "Español", "Français", "Deutsch", "Português",
     "हिन्दी (Hindi)", "বাংলা (Bengali)", "العربية (Arabic)", "中文 (Chinese)",
@@ -37,17 +57,16 @@ allow_ac_control = st.checkbox("⚡ I want to control high-voltage (AC) devices 
 
 user_prompt = st.text_area("💬 Describe your microcontroller project:", placeholder="Ex: Control a 220V light bulb using a relay")
 
+# Buton de generare cod
 if st.button("⚡ Generate Code"):
     if "generation_count" not in st.session_state:
         st.session_state.generation_count = 0
 
-if is_premium:
-    with open(zip_file, "rb") as f:
-        st.download_button("📦 Download full project ZIP (Premium)", f, file_name=zip_file)
-else:
-    st.info("📦 Project export is a Premium feature.")
-    st.button("🚀 Upgrade to Premium")
-
+    MAX_FREE_GENERATIONS = 3
+    if not is_premium and st.session_state.generation_count >= MAX_FREE_GENERATIONS:
+        st.warning("🚫 You've reached the free generation limit.")
+        st.markdown('[☕ Support AIdoino on Buy Me a Coffee](https://buymeacoffee.com/nikolaelectronics)', unsafe_allow_html=True)
+        st.stop()
 
     if not user_prompt.strip():
         st.warning("Please describe your project before generating code.")
@@ -135,8 +154,12 @@ else:
                     if allow_ac_control:
                         zipf.write(pdf_file)
 
-                with open(zip_file, "rb") as f:
-                    st.download_button("📦 Download project ZIP", f, file_name=zip_file)
+                if is_premium:
+                    with open(zip_file, "rb") as f:
+                        st.download_button("📦 Download full project ZIP (Premium)", f, file_name=zip_file)
+                else:
+                    st.info("📦 Project export is a Premium feature.")
+                    st.button("🚀 Upgrade to Premium")
 
             except Exception as e:
                 st.error(f"❌ Error: {e}")
