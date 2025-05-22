@@ -29,10 +29,21 @@ st.markdown(
 # ☕ Buy Me a Coffee button
 st.markdown(
     """
-    <div style="text-align: center; margin-bottom: 2rem;">
-        <a href="https://buymeacoffee.com/nikolaelectronics" target="_blank">
-            <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png"
-                 alt="Buy Me A Coffee" style="height: 60px !important;">
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="https://buymeacoffee.com/nikolaelectronics" target="_blank" 
+           style="
+               display: inline-block;
+               background-color: #FFDD00;
+               color: black;
+               font-weight: bold;
+               padding: 12px 24px;
+               text-decoration: none;
+               border-radius: 8px;
+               box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+               font-size: 16px;
+               margin-top: 10px;
+           ">
+            ☕ Buy Me a Coffee
         </a>
         <p style="color: gray; font-size: 0.9rem; margin-top: 0.5rem;">
             Support AIdoino to keep it free and evolving ⚡
@@ -41,6 +52,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 # Selecții
 language = st.selectbox("🌍 Choose explanation language:", [
