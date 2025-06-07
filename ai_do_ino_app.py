@@ -21,7 +21,7 @@ user_password = st.text_input("🔑 Enter Premium password:", type="password")
 is_premium = (user_password == current_password)
 
 # ✅ DEBUG temporar (poate fi scos după test)
-st.text(f"user_password: {repr(user_password)} | current_password: {repr(current_password)}")
+#st.text(f"user_password: {repr(user_password)} | current_password: {repr(current_password)}")
 
 # 🧠 Titlu și logo
 st.markdown(
