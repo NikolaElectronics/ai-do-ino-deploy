@@ -9,7 +9,7 @@ from PIL import Image
 st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
 
 # 🔐 Setare manuală premium (temporar)
-is_premium = False
+is_premium = True
 
 # 🧠 Logo și titlu
 st.markdown(
@@ -202,6 +202,8 @@ if st.button("⚡ Generate Code"):
                     zipf.write(board_info_path, "board_info.md")
 
                 if is_premium:
+                    st.write("✅ Premium: ", is_premium)
+                    st.write("📦 ZIP file exists:", os.path.exists(zip_file))
                     with open(zip_file, "rb") as f:
                         st.download_button("📦 Download full project ZIP (Premium)", f, file_name=zip_file)
                 else:
