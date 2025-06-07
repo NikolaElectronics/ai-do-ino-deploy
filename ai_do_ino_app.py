@@ -53,7 +53,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
 # Selecții
 language = st.selectbox("🌍 Choose explanation language:", [
     "English", "Română", "Español", "Français", "Deutsch", "Português",
@@ -61,9 +60,39 @@ language = st.selectbox("🌍 Choose explanation language:", [
     "日本語 (Japanese)", "한국어 (Korean)", "ไทย (Thai)", "Türkçe", "Italiano", "Русский (Russian)"
 ])
 
+lang_map = {
+    "English": "en",
+    "Română": "ro",
+    "Español": "es",
+    "Français": "fr",
+    "Deutsch": "de",
+    "Português": "pt",
+    "हिन्दी (Hindi)": "hi",
+    "বাংলা (Bengali)": "bn",
+    "العربية (Arabic)": "ar",
+    "中文 (Chinese)": "zh",
+    "日本語 (Japanese)": "ja",
+    "한국어 (Korean)": "ko",
+    "ไทย (Thai)": "th",
+    "Türkçe": "tr",
+    "Italiano": "it",
+    "Русский (Russian)": "ru"
+}
+lang_code = lang_map.get(language, "en")
+
 board = st.selectbox("🧰 Select your development board:", [
     "Arduino Uno", "Arduino Uno R4 (Renesas)", "Arduino Nano", "ESP32", "ESP8266", "Raspberry Pi"
 ])
+
+board_map = {
+    "Arduino Uno": "uno",
+    "Arduino Uno R4 (Renesas)": "uno_r4",
+    "Arduino Nano": "nano",
+    "ESP32": "esp32",
+    "ESP8266": "esp8266",
+    "Raspberry Pi": "raspberrypi"
+}
+board_code = board_map.get(board, "uno")
 
 allow_ac_control = st.checkbox("⚡ I want to control high-voltage (AC) devices using relays or optocouplers")
 
@@ -160,11 +189,17 @@ if st.button("⚡ Generate Code"):
                     ))
                     pdf.output(pdf_file)
 
+                # Adăugare board_info.md tradus
+                board_info_path = f"board_templates/{board_code}_{lang_code}.md"
+                if not os.path.exists(board_info_path):
+                    board_info_path = f"board_templates/{board_code}_en.md"
+
                 with zipfile.ZipFile(zip_file, "w") as zipf:
                     zipf.write(code_file)
                     zipf.write(doc_file)
                     if allow_ac_control:
                         zipf.write(pdf_file)
+                    zipf.write(board_info_path, "board_info.md")
 
                 if is_premium:
                     with open(zip_file, "rb") as f:

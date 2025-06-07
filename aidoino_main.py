@@ -30,7 +30,7 @@ language = st.selectbox("🌍 Choose explanation language:", [
 lang_map = {
     "English": "en",
     "Română": "ro",
-    "Español2": "es",
+    "Español": "es",
     "Français": "fr",
     "Deutsch": "de",
     "Português": "pt",
