@@ -16,11 +16,14 @@ def get_current_password():
 current_password = get_current_password()
 user_password = st.text_input("🔑 Enter Premium password:", type="password")
 is_premium = (user_password == current_password)
+if user_password:
+    if is_premium:
+        st.success("✅ Premium unlocked!")
+    else:
+        st.error("❌ Incorrect password.")
+
 # Configurație pagină
 st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
-
-# 🔐 Setare manuală premium (temporar)
-is_premium = True
 
 # 🧠 Logo și titlu
 st.markdown(
@@ -67,7 +70,7 @@ st.markdown(
 # Selecții
 language = st.selectbox("🌍 Choose explanation language:", [
     "English", "Română", "Español", "Français", "Deutsch", "Português",
-    "हिन्दी (Hindi)", "বাংলা (Bengali)", "العربية (Arabic)", "中文 (Chinese)",
+    "हिंदी (Hindi)", "বাংলা (Bengali)", "العربية (Arabic)", "中文 (Chinese)",
     "日本語 (Japanese)", "한국어 (Korean)", "ไทย (Thai)", "Türkçe", "Italiano", "Русский (Russian)"
 ])
 
@@ -78,7 +81,7 @@ lang_map = {
     "Français": "fr",
     "Deutsch": "de",
     "Português": "pt",
-    "हिन्दी (Hindi)": "hi",
+    "हिंदी (Hindi)": "hi",
     "বাংলা (Bengali)": "bn",
     "العربية (Arabic)": "ar",
     "中文 (Chinese)": "zh",
@@ -91,7 +94,7 @@ lang_map = {
 }
 lang_code = lang_map.get(language, "en")
 
-board = st.selectbox("🧰 Select your development board:", [
+board = st.selectbox("🪰 Select your development board:", [
     "Arduino Uno", "Arduino Uno R4 (Renesas)", "Arduino Nano", "ESP32", "ESP8266", "Raspberry Pi"
 ])
 
@@ -200,11 +203,9 @@ if st.button("⚡ Generate Code"):
                     ))
                     pdf.output(pdf_file)
 
-                # Adăugare board_info.md tradus
                 board_info_path = f"board_templates/{board_code}_{lang_code}.md"
                 if not os.path.exists(board_info_path):
                     board_info_path = f"board_templates/{board_code}_en.md"
-
 
                 with zipfile.ZipFile(zip_file, "w") as zipf:
                     zipf.write(code_file)
@@ -214,8 +215,6 @@ if st.button("⚡ Generate Code"):
                     zipf.write(board_info_path, "board_info.md")
 
                 if is_premium:
-                    st.write("✅ Premium: ", is_premium)
-                    st.write("📦 ZIP file exists:", os.path.exists(zip_file))
                     with open(zip_file, "rb") as f:
                         st.download_button("📦 Download full project ZIP (Premium)", f, file_name=zip_file)
                 else:

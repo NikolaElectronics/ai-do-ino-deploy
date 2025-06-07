@@ -150,25 +150,4 @@ if st.button("⚡ Generate Code"):
                         f"User prompt: {user_prompt}\n"
                         "AC Control Option: ENABLED\n\n"
                         "By generating this code, the user confirms they understand that working with high-voltage (AC) "
-                        "components requires proper safety precautions, including the use of relays, optocouplers, and isolation.\n\n"
-                        "The user takes full responsibility for the application and consequences of the code generated."
-                    ))
-                    pdf.output(pdf_file)
-
-                # Path to board_info.md
-                board_info_path = f"board_templates/{board_code}_{lang_code}.md"
-                if not os.path.exists(board_info_path):
-                    board_info_path = f"board_templates/{board_code}_en.md"
-
-                with zipfile.ZipFile(zip_file, "w") as zipf:
-                    zipf.write(code_file)
-                    zipf.write(doc_file)
-                    if allow_ac_control:
-                        zipf.write(pdf_file)
-                    zipf.write(board_info_path, "board_info.md")
-
-                with open(zip_file, "rb") as f:
-                    st.download_button("📦 Download project ZIP", f, file_name=zip_file)
-
-            except Exception as e:
-                st.error(f"❌ Error: {e}")
+                      
