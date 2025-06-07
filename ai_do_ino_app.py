@@ -190,7 +190,7 @@ if st.button("⚡ Generate Code"):
                     pdf.output(pdf_file)
 
                 # Adăugare board_info.md tradus
-                board_info_path = f"board_templates/{board_code}_{lang_code}.md"
+                board_info_path = f"board_templates/board_info_{lang_code}.md"
                 if not os.path.exists(board_info_path):
                     board_info_path = f"board_templates/{board_code}_en.md"
 
