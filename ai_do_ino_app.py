@@ -195,12 +195,22 @@ if st.button("⚡ Generate Code"):
                         zipf.write(pdf_file)
                     zipf.write(board_info_path, "board_info.md")
 
+                # 🔐 Dacă utilizatorul e deja premium, oferim direct descărcarea
                 if is_premium:
                     with open(zip_file, "rb") as f:
                         st.download_button("📦 Download full project ZIP (Premium)", f, file_name=zip_file)
                 else:
-                    st.info("📦 Project export is a Premium feature.")
-                    st.button("🚀 Upgrade to Premium")
+                    # 👁️ Cerem parola direct aici, jos
+                    st.warning("🔒 Enter the Premium password to unlock ZIP export:")
+                    user_password = st.text_input("🔑 Premium password:", type="password", key="premium_zip_input")
+                    current_password = get_current_password()
+                    if user_password == current_password:
+                        with open(zip_file, "rb") as f:
+                            st.success("✅ Password correct. Download unlocked!")
+                            st.download_button("📦 Download full project ZIP (Premium)", f, file_name=zip_file)
+                    elif user_password:
+                        st.error("❌ Incorrect password.")
+
 
             except Exception as e:
                 st.error(f"❌ Error: {e}")
