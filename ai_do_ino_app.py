@@ -8,18 +8,6 @@ from PIL import Image
 # ✅ Aceasta trebuie să fie PRIMA comandă Streamlit
 st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
 
-# 🔐 Autentificare Premium cu parolă
-def get_current_password():
-    try:
-        with open("premium_password.txt", "r") as f:
-            return f.read().strip()
-    except:
-        return None
-
-current_password = get_current_password()
-user_password = st.text_input("🔑 Enter Premium password:", type="password")
-is_premium = (user_password == current_password)
-
 # ✅ DEBUG temporar (poate fi scos după test)
 #st.text(f"user_password: {repr(user_password)} | current_password: {repr(current_password)}")
 
@@ -64,6 +52,17 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+# 🔐 Autentificare Premium cu parolă
+def get_current_password():
+    try:
+        with open("premium_password.txt", "r") as f:
+            return f.read().strip()
+    except:
+        return None
+
+current_password = get_current_password()
+user_password = st.text_input("🔑 Enter Premium password:", type="password")
+is_premium = (user_password == current_password)
 
 # ↺ Feedback vizual pentru parolă
 if user_password:
