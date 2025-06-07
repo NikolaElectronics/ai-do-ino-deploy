@@ -16,11 +16,63 @@ def get_current_password():
 current_password = get_current_password()
 user_password = st.text_input("🔑 Enter Premium password:", type="password")
 is_premium = (user_password == current_password)
+
+# ✅ DEBUG temporar pentru a vedea ce valori sunt comparate
+st.text(f"user_password: {repr(user_password)} | current_password: {repr(current_password)}")
+
+# Configurație pagină
+st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
+
+# 🧠 Logo și titlu
+st.markdown(
+    """
+    <div style="text-align: center; margin-bottom: 2.5rem;">
+        <img src="https://raw.githubusercontent.com/NikolaElectronics/ai-do-ino-deploy/main/logo.png"
+             style="width: 280px; max-width: 100%; height: auto; margin-bottom: 1rem;">
+        <h1 style="font-size: 3.5rem; margin: 0;">AIdoino</h1>
+        <p style="font-size: 1.4rem; color: #aaa; margin-top: 0.3rem;">
+            Your AI-based Arduino Assistant
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# ☕ Buy Me a Coffee button
+st.markdown(
+    """
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="https://buymeacoffee.com/nikolaelectronics" target="_blank" 
+           style="
+               display: inline-block;
+               background-color: #FFDD00;
+               color: black;
+               font-weight: bold;
+               padding: 12px 24px;
+               text-decoration: none;
+               border-radius: 8px;
+               box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+               font-size: 16px;
+               margin-top: 10px;
+           ">
+            ☕ Buy Me a Coffee
+        </a>
+        <p style="color: gray; font-size: 0.9rem; margin-top: 0.5rem;">
+            Support AIdoino to keep it free and evolving ⚡
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# ↺ Feedback vizual pentru parola
 if user_password:
     if is_premium:
         st.success("✅ Premium unlocked!")
     else:
         st.error("❌ Incorrect password.")
+
+# (restul codului continuă ca până acum)
 
 # Configurație pagină
 st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
