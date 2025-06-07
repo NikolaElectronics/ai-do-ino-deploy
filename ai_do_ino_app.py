@@ -5,6 +5,17 @@ from fpdf import FPDF
 import zipfile
 from PIL import Image
 
+# 🔐 Autentificare Premium cu parolă
+def get_current_password():
+    try:
+        with open("premium_password.txt", "r") as f:
+            return f.read().strip()
+    except:
+        return None
+
+current_password = get_current_password()
+user_password = st.text_input("🔑 Enter Premium password:", type="password")
+is_premium = (user_password == current_password)
 # Configurație pagină
 st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
 
