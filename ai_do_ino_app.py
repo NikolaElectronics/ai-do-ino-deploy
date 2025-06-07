@@ -5,6 +5,9 @@ from fpdf import FPDF
 import zipfile
 from PIL import Image
 
+# ✅ Aceasta trebuie să fie PRIMA comandă Streamlit
+st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
+
 # 🔐 Autentificare Premium cu parolă
 def get_current_password():
     try:
@@ -17,13 +20,10 @@ current_password = get_current_password()
 user_password = st.text_input("🔑 Enter Premium password:", type="password")
 is_premium = (user_password == current_password)
 
-# ✅ DEBUG temporar pentru a vedea ce valori sunt comparate
+# ✅ DEBUG temporar (poate fi scos după test)
 st.text(f"user_password: {repr(user_password)} | current_password: {repr(current_password)}")
 
-# Configurație pagină
-st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
-
-# 🧠 Logo și titlu
+# 🧠 Titlu și logo
 st.markdown(
     """
     <div style="text-align: center; margin-bottom: 2.5rem;">
@@ -65,91 +65,31 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ↺ Feedback vizual pentru parola
+# ↺ Feedback vizual pentru parolă
 if user_password:
     if is_premium:
         st.success("✅ Premium unlocked!")
     else:
         st.error("❌ Incorrect password.")
 
-# (restul codului continuă ca până acum)
-
-# Configurație pagină
-st.set_page_config(page_title="AIdoino", page_icon="🤖", layout="centered")
-
-# 🧠 Logo și titlu
-st.markdown(
-    """
-    <div style="text-align: center; margin-bottom: 2.5rem;">
-        <img src="https://raw.githubusercontent.com/NikolaElectronics/ai-do-ino-deploy/main/logo.png"
-             style="width: 280px; max-width: 100%; height: auto; margin-bottom: 1rem;">
-        <h1 style="font-size: 3.5rem; margin: 0;">AIdoino</h1>
-        <p style="font-size: 1.4rem; color: #aaa; margin-top: 0.3rem;">
-            Your AI-based Arduino Assistant
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
-# ☕ Buy Me a Coffee button
-st.markdown(
-    """
-    <div style="text-align: center; margin-top: 2rem;">
-        <a href="https://buymeacoffee.com/nikolaelectronics" target="_blank" 
-           style="
-               display: inline-block;
-               background-color: #FFDD00;
-               color: black;
-               font-weight: bold;
-               padding: 12px 24px;
-               text-decoration: none;
-               border-radius: 8px;
-               box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-               font-size: 16px;
-               margin-top: 10px;
-           ">
-            ☕ Buy Me a Coffee
-        </a>
-        <p style="color: gray; font-size: 0.9rem; margin-top: 0.5rem;">
-            Support AIdoino to keep it free and evolving ⚡
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
-# Selecții
+# 🌍 Selectare limbă
 language = st.selectbox("🌍 Choose explanation language:", [
     "English", "Română", "Español", "Français", "Deutsch", "Português",
     "हिंदी (Hindi)", "বাংলা (Bengali)", "العربية (Arabic)", "中文 (Chinese)",
     "日本語 (Japanese)", "한국어 (Korean)", "ไทย (Thai)", "Türkçe", "Italiano", "Русский (Russian)"
 ])
-
 lang_map = {
-    "English": "en",
-    "Română": "ro",
-    "Español": "es",
-    "Français": "fr",
-    "Deutsch": "de",
-    "Português": "pt",
-    "हिंदी (Hindi)": "hi",
-    "বাংলা (Bengali)": "bn",
-    "العربية (Arabic)": "ar",
-    "中文 (Chinese)": "zh",
-    "日本語 (Japanese)": "ja",
-    "한국어 (Korean)": "ko",
-    "ไทย (Thai)": "th",
-    "Türkçe": "tr",
-    "Italiano": "it",
-    "Русский (Russian)": "ru"
+    "English": "en", "Română": "ro", "Español": "es", "Français": "fr", "Deutsch": "de",
+    "Português": "pt", "हिंदी (Hindi)": "hi", "বাংলা (Bengali)": "bn", "العربية (Arabic)": "ar",
+    "中文 (Chinese)": "zh", "日本語 (Japanese)": "ja", "한국어 (Korean)": "ko", "ไทย (Thai)": "th",
+    "Türkçe": "tr", "Italiano": "it", "Русский (Russian)": "ru"
 }
 lang_code = lang_map.get(language, "en")
 
-board = st.selectbox("🪰 Select your development board:", [
+# 🧰 Selectare placă
+board = st.selectbox("🧰 Select your development board:", [
     "Arduino Uno", "Arduino Uno R4 (Renesas)", "Arduino Nano", "ESP32", "ESP8266", "Raspberry Pi"
 ])
-
 board_map = {
     "Arduino Uno": "uno",
     "Arduino Uno R4 (Renesas)": "uno_r4",
@@ -160,11 +100,13 @@ board_map = {
 }
 board_code = board_map.get(board, "uno")
 
+# ⚡ Opțiune AC
 allow_ac_control = st.checkbox("⚡ I want to control high-voltage (AC) devices using relays or optocouplers")
 
+# 🧠 Prompt de la utilizator
 user_prompt = st.text_area("💬 Describe your microcontroller project:", placeholder="Ex: Control a 220V light bulb using a relay")
 
-# Buton de generare cod
+# 🔁 Buton generare
 if st.button("⚡ Generate Code"):
     if "generation_count" not in st.session_state:
         st.session_state.generation_count = 0
@@ -190,7 +132,6 @@ if st.button("⚡ Generate Code"):
                     "Adapt the code to the board specified. If the board is Raspberry Pi, use Python. "
                     "Otherwise, use C++ (Arduino-style)."
                 )
-
                 if not allow_ac_control:
                     system_prompt += " Never generate code for AC control unless explicitly allowed."
 
@@ -216,6 +157,7 @@ if st.button("⚡ Generate Code"):
                 st.success("✅ Code generated successfully!")
                 st.code(generated_code, language="cpp")
 
+                # Scriere fișiere
                 code_file = "arduino_sketch.ino"
                 doc_file = "project_description.md"
                 pdf_file = "high_voltage_confirmation.pdf"
@@ -224,37 +166,25 @@ if st.button("⚡ Generate Code"):
                 with open(code_file, "w") as f:
                     f.write(generated_code)
 
-                project_doc = (
-                    "# AIdoino Project\n\n"
-                    f"**Board:** {board}\n"
-                    f"**AC control enabled:** {'Yes' if allow_ac_control else 'No'}\n\n"
-                    "---\n\n"
-                    "**User Prompt:**\n"
-                    f"{user_prompt}\n\n"
-                    "---\n\n"
-                    "**Generated Code:**\n"
-                    "```\n"
-                    f"{generated_code}\n"
-                    "```"
-                )
                 with open(doc_file, "w") as f:
-                    f.write(project_doc)
+                    f.write(
+                        f"# AIdoino Project\n\n**Board:** {board}\n**AC control enabled:** {'Yes' if allow_ac_control else 'No'}\n\n"
+                        f"---\n\n**User Prompt:**\n{user_prompt}\n\n---\n\n**Generated Code:**\n```\n{generated_code}\n```"
+                    )
 
                 if allow_ac_control:
                     pdf = FPDF()
                     pdf.add_page()
                     pdf.set_font("Arial", size=12)
                     pdf.multi_cell(0, 10, txt=(
-                        "AIdoino - High Voltage Responsibility Confirmation\n\n"
-                        f"Board selected: {board}\n"
-                        f"User prompt: {user_prompt}\n"
-                        "AC Control Option: ENABLED\n\n"
+                        f"AIdoino - High Voltage Responsibility Confirmation\n\nBoard selected: {board}\n"
+                        f"User prompt: {user_prompt}\nAC Control Option: ENABLED\n\n"
                         "By generating this code, the user confirms they understand that working with high-voltage (AC) "
-                        "components requires proper safety precautions, including the use of relays, optocouplers, and isolation.\n\n"
-                        "The user takes full responsibility for the application and consequences of the code generated."
+                        "components requires proper safety precautions, including the use of relays, optocouplers, and isolation."
                     ))
                     pdf.output(pdf_file)
 
+                # 🧾 board_info.md în funcție de placă și limbă
                 board_info_path = f"board_templates/{board_code}_{lang_code}.md"
                 if not os.path.exists(board_info_path):
                     board_info_path = f"board_templates/{board_code}_en.md"
