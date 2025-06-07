@@ -60,16 +60,16 @@ def get_current_password():
     except:
         return None
 
-current_password = get_current_password()
-user_password = st.text_input("🔑 Enter Premium password:", type="password")
-is_premium = (user_password == current_password)
+#current_password = get_current_password()
+#user_password = st.text_input("🔑 Enter Premium password:", type="password")
+#is_premium = (user_password == current_password)
 
 # ↺ Feedback vizual pentru parolă
-if user_password:
-    if is_premium:
-        st.success("✅ Premium unlocked!")
-    else:
-        st.error("❌ Incorrect password.")
+#if user_password:
+    #if is_premium:
+        #st.success("✅ Premium unlocked!")
+    #else:
+        #st.error("❌ Incorrect password.")
 
 # 🌍 Selectare limbă
 language = st.selectbox("🌍 Choose explanation language:", [
